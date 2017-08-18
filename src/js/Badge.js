@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class App extends Component {
+export default class Badge extends Component {
   render() {
     return (
       // Add your component markup and other subcomponent references here.
