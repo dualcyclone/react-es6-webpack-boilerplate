@@ -38,7 +38,7 @@ export default class Input extends Component {
         </code>;
     }
 
-    return <div>
+    return <div className={ this.props.className }>
       { partial }
     </div>
   }

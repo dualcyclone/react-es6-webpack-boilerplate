@@ -6,13 +6,17 @@ h1 {
   display: none;
 }
 
+.walletAddress {
+  display: inline-block;
+}
+
 .token {
   border: 1px solid #000;
   width: 220px;
   text-align: center;
   padding: 10px;
   display: inline-block;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
 }
 
 .token:nth-last-of-type(1) {

@@ -29,6 +29,10 @@ export default class App extends Component {
       .then(res => {
         const walletData = res.data;
 
+        if (walletData.error) {
+          return walletData;
+        }
+
         return axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD')
           .then(r => {
             walletData.ETH.price = {
@@ -42,7 +46,7 @@ export default class App extends Component {
       .then(walletData => {
         this.setState({
           loading: false,
-          wallet: new Wallet(walletData)
+          wallet: walletData.error ? walletData : new Wallet(walletData)
         });
       });
   }
@@ -70,7 +74,7 @@ export default class App extends Component {
   render() {
     let walletData = this.state.loading !== null ? 'Loading' : '';
 
-    if (!this.state.loading && this.state.loading !== null) {
+    if (!this.state.loading && this.state.loading !== null && !this.state.wallet.error) {
       walletData = (
         <div>
           <p>Balance: { this.state.wallet.balance } ETH</p>
@@ -82,11 +86,24 @@ export default class App extends Component {
       );
     }
 
+    if (this.state.wallet && this.state.wallet.error) {
+      walletData = (
+        <div>
+          <p>
+            <em>Unfortunately an error has occured</em>
+          </p>
+          <p>{ this.state.wallet.error.message }</p>
+        </div>
+      );
+    }
+
     return (
       <div>
         <h1>Ethereum Wallet Explorer</h1>
 
-        <Input onChange={ this.handleWalletAddressChange.bind(this) } />
+        <div>
+          Wallet address: <Input onChange={ this.handleWalletAddressChange.bind(this) } className="walletAddress"/>
+        </div>
 
         <div>{ walletData }</div>
 
@@ -96,3 +113,6 @@ export default class App extends Component {
     );
   }
 }
+
+0xe7775a6e9bcf904eb39da2b68c5efb4f9360e08c
+0x0000000000000000000000000000000000000000
