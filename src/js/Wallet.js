@@ -5,22 +5,37 @@ export default class Wallet {
 
   buildWalletInfo(data) {
     const wallet = {};
+    const tokenData = this.buildTokenInfo(data.tokens);
 
     wallet.address = data.address;
     wallet.balance = data.ETH.balance;
-    wallet.tokenInfo = this.buildTokenInfo(data.tokens);
+    wallet.combinedValue = 0;
+    wallet.tokenInfo = tokenData.tokenInfo;
+    wallet.value = wallet.balance * data.ETH.price.rate;
+    wallet.combinedValue = wallet.value + tokenData.combinedValue;
+    wallet.priceCurrency = data.ETH.price.currency;
 
     return wallet;
   }
 
   buildTokenInfo(tokens) {
-    const tokenData = [];
+    const tokenInfo = [];
+    let combinedValue = 0;
 
-    if (tokens.length > 0) {
-      tokens.forEach(token => tokenData.push(this.buildToken(token)));
+    if (tokens && tokens.length > 0) {
+      tokens.forEach((token) => {
+        const formattedToken = this.buildToken(token);
+
+        combinedValue += parseFloat(formattedToken.value);
+
+        tokenInfo.push(formattedToken);
+      });
     }
 
-    return tokenData;
+    return {
+      tokenInfo: tokenInfo,
+      combinedValue: combinedValue
+    };
   }
 
   buildToken(token) {
@@ -30,9 +45,11 @@ export default class Wallet {
     tok.symbol = token.tokenInfo.symbol;
     tok.totalSupply = token.tokenInfo.totalSupply;
     tok.decimals = token.tokenInfo.decimals;
-    tok.price = token.tokenInfo.price.rate;
-    tok.priceCurrency = token.tokenInfo.price.currency;
+    tok.price = token.tokenInfo.price ? token.tokenInfo.price.rate : 0;
+    tok.priceCurrency = token.tokenInfo.price ? token.tokenInfo.price.currency : 'USD';
     tok.balance = token.balance;
+    tok.formattedBalance = (token.balance / (10 ** tok.decimals)).toFixed(tok.decimals);
+    tok.value = ((token.balance * tok.price) / (10 ** tok.decimals)).toFixed(2);
 
     return tok;
   }
