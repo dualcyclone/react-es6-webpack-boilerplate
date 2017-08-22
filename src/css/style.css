@@ -1,13 +1,39 @@
-h1 {
-  color: #f00;
+body {
+  background-color: #193F56;
+  color: #fefefe;
+  font: normal 100% "Galano-alt", Arial;
 }
 
-.hidden {
-  display: none;
+a, a:visited {
+  color: #fefefe;
+  text-decoration: underline;
+}
+
+h1 {
+
 }
 
 .walletAddress {
   display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  border: 1px solid #fefefe;
+  border-radius: 3px;
+  padding: 10px;
+  width: calc(100% - 20px);
+  text-align: center;
+}
+
+.walletAddress input {
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  color: #fefefe;
+  width: calc(100% - 40px);
+  text-align: center;
+  outline-width: 0;
 }
 
 .token {
@@ -33,4 +59,25 @@ h1 {
 
 .token table td {
   text-align: center;
+}
+
+.balance {
+  color: #05BFC9;
+}
+
+.toolTip {
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 5px;
+  display: inline-block;
+  background: #69727f;
+  color: #fff;
+  font-family: courier;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.hidden {
+  display: none;
 }

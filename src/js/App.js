@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import TokenBadge from './TokenBadge';
+import CryptoBadge from './CryptoBadge';
 import Wallet from './Wallet';
 import Input from './Input';
 
-const WALLET_ADDR = '0x2f16cc0f50b1e7088177f71ab02985d4daaf7a03';
+const sample_wallet_01 = '0xecd7da67e6563bbddfc2ddff9ba2632c721af181';
+const sample_wallet_02 = '0x0000000000000000000000000000000000000000'
 
 export default class App extends Component {
   constructor(props) {
@@ -64,7 +65,11 @@ export default class App extends Component {
 
     tokenInfo.forEach(token => {
       formattedTokenInfo.push(
-        <TokenBadge info={ token } />
+        <CryptoBadge
+          symbol={ token.symbol }
+          value={ token.value }
+          balance={ token.formattedBalance }
+          currency={ token.priceCurrency } />
       );
     });
 
@@ -77,9 +82,15 @@ export default class App extends Component {
     if (!this.state.loading && this.state.loading !== null && !this.state.wallet.error) {
       walletData = (
         <div>
-          <p>Balance: { this.state.wallet.balance } ETH</p>
-          <p>Ethereum value: { this.state.wallet.value } { this.state.wallet.priceCurrency }</p>
           <p>Combined value: { this.state.wallet.combinedValue } { this.state.wallet.priceCurrency }</p>
+
+          <CryptoBadge
+            symbol='ETH'
+            value={ this.state.wallet.value }
+            balance={  this.state.wallet.balance }
+            currency={ this.state.wallet.priceCurrency } />
+
+          <br/>
 
           { this.formatTokenInfo(this.state.wallet.tokenInfo) }
         </div>
@@ -102,7 +113,10 @@ export default class App extends Component {
         <h1>Ethereum Wallet Explorer</h1>
 
         <div>
-          Wallet address: <Input onChange={ this.handleWalletAddressChange.bind(this) } className="walletAddress"/>
+          <Input
+            onChange={ this.handleWalletAddressChange.bind(this) }
+            startLabel="Please enter a wallet address to begin"
+            className="walletAddress" toolTip="Click to change address"/>
         </div>
 
         <div>{ walletData }</div>
@@ -113,6 +127,3 @@ export default class App extends Component {
     );
   }
 }
-
-0xe7775a6e9bcf904eb39da2b68c5efb4f9360e08c
-0x0000000000000000000000000000000000000000

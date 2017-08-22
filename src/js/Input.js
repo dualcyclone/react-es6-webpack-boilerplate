@@ -6,7 +6,8 @@ export default class Input extends Component {
 
     this.state = {
       value: '',
-      inputHidden: true
+      inputHidden: true,
+      toolTipVisible: false
     };
   };
 
@@ -15,7 +16,8 @@ export default class Input extends Component {
 
     this.setState({
       value: inputVal,
-      inputHidden: true
+      inputHidden: true,
+      toolTipVisible: false
     });
 
     if (this.props.onChange) {
@@ -29,16 +31,44 @@ export default class Input extends Component {
     });
   }
 
+  showTip() {
+    const tip = this.props.toolTip;
+
+    if (tip && tip !== '') {
+      this.setState({
+        toolTipVisible: true
+      });
+    }
+  }
+
+  hideTip() {
+    const tip = this.props.toolTip;
+
+    if (tip && tip !== '') {
+      this.setState({
+        toolTipVisible: false
+      });
+    }
+  }
+
   render() {
     let partial = <input type="text" onBlur={ this.onBlur.bind(this) } autoFocus />;
 
     if (this.state.inputHidden) {
-      partial = <code onClick={ this.onClick.bind(this) }>
-          {this.state.value || 'Enter code'}
-        </code>;
+      partial =
+        <div>
+          <code>
+            {this.state.value || this.props.startLabel || 'Enter code'}
+          </code>
+          <div className={ 'toolTip' + (!this.state.toolTipVisible ? ' hidden' : '') }>{ this.props.toolTip }</div>
+        </div>;
     }
 
-    return <div className={ this.props.className }>
+    return <div
+      className={ this.props.className }
+      onClick={ this.onClick.bind(this) }
+      onMouseOver={ this.showTip.bind(this) }
+      onMouseOut={ this.hideTip.bind(this) }>
       { partial }
     </div>
   }
